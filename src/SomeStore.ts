@@ -14,6 +14,7 @@ export class SomeStore {
     const params = { param1: 'A', param2: 'B' };
     const loadable = await this.loadableData.load({ params });
 
+    // loadable === this.loadableData
     // loadable.response.prop1;
     // loadable.response.prop2;
   }
