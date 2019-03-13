@@ -1,28 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { inject, observer } from 'mobx-react';
+import { SomeStore } from './SomeStore';
 
-class App extends Component {
+@inject('someStore')
+@observer
+export default class App extends Component<{ someStore?: SomeStore }> {
+  componentDidMount() {
+    this.props.someStore!.getSome();
+  }
   render() {
-    return (
+    if (!this.props.someStore!.loadableData) {
+      return null;
+    }
+
+    const { response, error, isLoading, isFailed } = this.props.someStore!.loadableData;
+
+    return ( 
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        Loading: {isLoading.toString()}
+        <hr/>
+        {isFailed
+          ? 'Error: ' + error.message
+          : 'Response: ' + response
+        }
       </div>
     );
   }
 }
-
-export default App;
